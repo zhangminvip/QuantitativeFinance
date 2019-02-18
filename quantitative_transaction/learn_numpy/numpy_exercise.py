@@ -99,3 +99,16 @@ print('where 多重条件 ', np.where(np.logical_and(tmp_test > 0.5, tmp_test < 
 np.save('stock_day_change', stock_day_change)
 stock_day_change = np.load('stock_day_change.npy')
 print(stock_day_change.shape)
+
+
+stock_day_change_four = stock_day_change[:4, :4]
+print(stock_day_change_four)
+
+print('最大涨幅{}'.format(np.max(stock_day_change_four[ :2, :], axis=1)))
+print('最大跌幅{}'.format(np.min(stock_day_change_four, axis=1)))
+print('振幅幅度{}'.format(np.std(stock_day_change_four, axis=1)))
+print('平均涨跌{}'.format(np.mean(stock_day_change_four, axis=1)))
+
+
+print('最大涨幅{}'.format(np.max(stock_day_change_four, axis=0)))
+
