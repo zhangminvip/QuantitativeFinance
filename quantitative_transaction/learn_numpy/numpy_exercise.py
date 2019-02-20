@@ -2,6 +2,8 @@ import numpy as np
 import time
 from abupy import six, xrange, range, reduce, map, filter, partial
 
+import matplotlib.pyplot as plt
+
 start_normal = time.clock()
 normal_list = range(1000)
 [i ** 2 for i in normal_list]
@@ -111,4 +113,21 @@ print('平均涨跌{}'.format(np.mean(stock_day_change_four, axis=1)))
 
 
 print('最大涨幅{}'.format(np.max(stock_day_change_four, axis=0)))
+print('最大涨幅{}'.format(np.argmax(stock_day_change_four, axis=0)))
+
+
+a_investor = np.random.normal(loc=100, scale=50, size=(100, 1))
+b_investor = np.random.normal(loc=100, scale=50, size=(100, 1))
+
+print('a交易者期望{0:.2f},标准差{1:.2f},方差{2:0.2f}'.format(a_investor.mean(), a_investor.std(), a_investor.var()))
+print('b交易者期望{0:.2f},标准差{1:.2f},方差{2:0.2f}'.format(b_investor.mean(), b_investor.std(), b_investor.var()))
+
+
+a_mean = a_investor.mean()
+a_std = a_investor.std()
+
+plt.plot(a_investor)
+plt.axhline(a_mean+a_std, color='r')
+plt.axhline(a_mean - a_std, color='y')
+plt.show()
 
