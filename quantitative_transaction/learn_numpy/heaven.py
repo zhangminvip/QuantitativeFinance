@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 gamblers = 100
 def casino(win_rate, win_once=1, loss_once=1, commission=0.01):
     '''
-    每人一百万， 每人玩一千万次
+    每人一万， 每人玩一百次
     :param win_rate: 输赢概率
     :param win_once:每次赢得钱数
     :param loss_once:每次输的钱数
