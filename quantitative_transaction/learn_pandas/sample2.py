@@ -53,6 +53,18 @@ print(tsla_df.close.map(format).tail())
 
 
 
+# save as csv, save index and columns by default.
+# tsla_df.to_csv('tsla_df.csv', columns=tsla_df.columns, index=True)
+tsla_df.to_csv('tsla_df.csv')
+
+# specify column 0 to be the index, convert the object to datetime
+tsla_df = pd.read_csv('tsla_df.csv', index_col=0, parse_dates=True)
+print('***')
+print(tsla_df.head())
+print(tsla_df.columns,'\n', tsla_df.index,tsla_df.date.dtype)
+
+
+
 
 
 
