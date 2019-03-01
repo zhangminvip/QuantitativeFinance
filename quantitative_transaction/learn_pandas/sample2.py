@@ -17,6 +17,43 @@ print(tsla_df.loc['2017-07-24':'2017-07-30',['open','close']])
 # 项目中使用最频繁
 print(tsla_df[['open','close']][0:3])
 
+print(tsla_df.columns)
+
+
+# get abs, multiple logic
+print(tsla_df[(np.abs(tsla_df.p_change )>8) & (tsla_df.volume > 2.5 * tsla_df.volume.mean())])
+
+
+# sort_index loc
+print(tsla_df.sort_index(by='p_change', ascending=False).loc['2017-03-3':'2017-03-22',['open','close']])
+
+# iloc
+print(tsla_df.sort_index(by='p_change', ascending=False).iloc[1:2,2:3])
+
+# series slice
+print(tsla_df.open.pct_change()[:3])
+
+
+
+# series pct_change function
+print('*'*20)
+change_ratio = tsla_df.close.pct_change()
+print(type(change_ratio))
+print(change_ratio.tail())
+
+
+# np round function
+print(np.round(change_ratio[-5:], 2))
+
+# series map function
+format = lambda x: '%.2f' % x
+print(change_ratio.map(format).tail())
+print(tsla_df.close.map(format).tail())
+
+
+
+
+
 
 
 
