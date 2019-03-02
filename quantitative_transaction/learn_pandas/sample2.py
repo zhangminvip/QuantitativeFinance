@@ -78,8 +78,21 @@ print(cats)
 print(cats.value_counts())
 
 
+bins = [-np.inf, -7.0, -5, -3, 0, 3, 5, 7, np.inf]
+cats = pd.cut(tsla_df.p_change, bins)
+print(cats.value_counts())
 
 
+change_ration_dummies = pd.get_dummies(cats, prefix='cr_dummies')
+print(change_ration_dummies.tail())
+
+print(cats)
 
 
+# concat append merge
+# tsla_df = pd.concat([tsla_df, change_ration_dummies], axis=1)
+# print(tsla_df.columns)
+# print(tsla_df.tail())
 
+# print(pd.concat([tsla_df[tsla_df.p_change > 10], tsla_df[tsla_df.atr14 > 16]], axis=0))
+# print(tsla_df[tsla_df.p_change > 10].append(tsla_df[tsla_df.atr14 > 16]))
