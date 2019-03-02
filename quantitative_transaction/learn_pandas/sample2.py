@@ -53,15 +53,29 @@ print(tsla_df.close.map(format).tail())
 
 
 
+
 # save as csv, save index and columns by default.
 # tsla_df.to_csv('tsla_df.csv', columns=tsla_df.columns, index=True)
 tsla_df.to_csv('tsla_df.csv')
 
 # specify column 0 to be the index, convert the object to datetime
-tsla_df = pd.read_csv('tsla_df.csv', index_col=0, parse_dates=True)
+tsla_df = pd.read_csv('tsla_df.csv', index_col=0)
 print('***')
 print(tsla_df.head())
 print(tsla_df.columns,'\n', tsla_df.index,tsla_df.date.dtype)
+
+
+# prove that the p_change field is the result of close using the pct_change()
+print(tsla_df.p_change.tail())
+print(tsla_df.tail().close.pct_change())
+
+tsla_df.p_change.hist(bins=80)
+plt.show()
+
+print('*'*50)
+cats = pd.qcut(np.abs(tsla_df.p_change), 10)
+print(cats)
+print(cats.value_counts())
 
 
 
