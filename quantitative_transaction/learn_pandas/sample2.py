@@ -2,9 +2,11 @@ import numpy as np
 import pandas as pd
 import time
 import matplotlib.pyplot as plt
-from abupy import six, xrange, range, reduce, map, filter, partial, ABuMarketDrawing, ABuSymbolPd
+import abupy
+from abupy import six, xrange, range, reduce, map, filter, partial, ABuMarketDrawing, ABuSymbolPd, ABuIndustries, ABuScalerUtil
 import scipy.stats as scs
 
+# abupy.env.enable_example_env_ipython()
 
 tsla_df = ABuSymbolPd.make_kl_df('usTSLA', n_folds=2)
 print(tsla_df.tail())
@@ -114,6 +116,68 @@ xt_pct.plot(figsize=(8, 5), kind='bar', stacked=True, title='date_week -> positi
 plt.xlabel('date_week')
 plt.ylabel('positive')
 plt.show()
+
+
+print(tsla_df.pivot_table(['positive'], index=['date_week'], aggfunc='mean'))
+
+
+
+print(tsla_df.groupby(['date_week','positive'])['positive'].count())
+
+jump_threshold = tsla_df.close.median() * 0.03
+
+print(jump_threshold)
+
+jump_pd = pd.DataFrame()
+
+# print(tsla_df.columns)
+
+def judge_jump(today):
+    if today.p_change > 0:
+        print('p_change > 0 :',today.low- today.pre_close)
+    elif today.p_change < 0:
+        print('p_change < 0', today.pre_close -today.high )
+
+    global jump_pd
+    if today.p_change > 0 and (today.low - today.pre_close )> jump_threshold:
+        '''符合向上跳空'''
+        today['jump'] = 1
+        # 向上能量=(今天最低-昨收) / 跳空阀值
+        today['jump_power'] = (today.low - today.pre_close) / jump_threshold
+        jump_pd = jump_pd.append(today)
+    elif today.p_change < 0 and (today.pre_close - today.high) > jump_threshold:
+        today['jump'] = -1
+        today['jump_power'] = (today.pre_close - today.high) / jump_threshold
+        jump_pd = jump_pd.append(today)
+
+for kl_index in np.arange(0, tsla_df.shape[0]):
+    today = tsla_df.ix[kl_index]
+    judge_jump(today)
+print(jump_pd.filter(['jump','jump_power', 'close', 'date','p_change', 'pre_close']))
+
+
+r_symbol = 'usTSLA'
+p_data, _ = ABuIndustries.get_industries_panel_from_target(r_symbol, show=False)
+print(type(p_data))
+print(p_data)
+
+p_data_it = p_data.swapaxes('items', 'minor')
+print(p_data_it)
+
+
+p_data_it_close = p_data_it['close'].dropna(axis=0)
+print(p_data_it_close.head())
+
+p_data_it_close = ABuScalerUtil.scaler_std(p_data_it_close)
+p_data_it_close.plot()
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.ylabel('Price')
+plt.xlabel('Time')
+plt.show()
+
+
+
+
 
 
 
