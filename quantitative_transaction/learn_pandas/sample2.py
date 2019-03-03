@@ -96,3 +96,26 @@ print(cats)
 
 # print(pd.concat([tsla_df[tsla_df.p_change > 10], tsla_df[tsla_df.atr14 > 16]], axis=0))
 # print(tsla_df[tsla_df.p_change > 10].append(tsla_df[tsla_df.atr14 > 16]))
+
+# print(tsla_df.columns)
+
+tsla_df['positive'] = np.where(tsla_df.p_change > 0, 1, 0)
+print(tsla_df.head())
+
+# building a crosstab
+xt = pd.crosstab(tsla_df.date_week, tsla_df.positive)
+print(xt)
+xt_pct = xt.div(xt.sum(1).astype(float), axis=0)
+print(xt_pct)
+
+
+# crosstab histogram
+xt_pct.plot(figsize=(8, 5), kind='bar', stacked=True, title='date_week -> positive', )
+plt.xlabel('date_week')
+plt.ylabel('positive')
+plt.show()
+
+
+
+
+
